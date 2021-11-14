@@ -3,8 +3,14 @@ from django.shortcuts import render
 
 # Create your views here.
 def index(request):
-    return render(index, 'index.html')
+    context = {
+        'title' : 'Geekshop'
+    }
+    return render(request, 'index.html', context)
 
 
 def products(request):
-    return render(products, 'products.html')
+    context = {
+        'title': 'Geekshop- catalog'
+    }
+    return render(request, 'products.html', context)
