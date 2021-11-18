@@ -1,41 +1,40 @@
-{
-  "goods": [
+[
     {
-      "img" : "vendor/img/products/Adidas-hoodie.png",
-      "card": "Худи черного цвета с монограммами adidas Originals",
+      "image" : "vendor/img/products/Adidas-hoodie.png",
+      "card" : "Худи черного цвета с монограммами adidas Originals",
       "price" : "6 090,00 руб.",
       "text": "Мягкая ткань для свитшотов. Стиль и комфорт – это образ жизни."
     },
     {
-      "img" : "vendor/img/products/Blue-jacket-The-North-Face.png",
-      "card": "Синяя куртка The North Face",
+      "image" : "vendor/img/products/Blue-jacket-The-North-Face.png",
+      "card" : "Синяя куртка The North Face",
       "price" : "23 725,00 руб.",
       "text": "Гладкая ткань. Водонепроницаемое покрытие. Легкий и теплый пуховый наполнитель."
     },
     {
-      "img" : "vendor/img/products/Brown-sports-oversized-top-ASOS-DESIGN.png",
-      "card": "Коричневый спортивный oversized-топ ASOS DESIGN",
+      "image" : "vendor/img/products/Brown-sports-oversized-top-ASOS-DESIGN.png",
+      "card" : "Коричневый спортивный oversized-топ ASOS DESIGN",
       "price" : "3 390,00 руб.",
       "text": "Материал с плюшевой текстурой. Удобный и мягкий"
     },
         {
-      "img" : "vendor/img/products/Black-Nike-Heritage-backpack.png",
-      "card": "Черный рюкзак Nike Heritage",
+      "image" : "vendor/img/products/Black-Nike-Heritage-backpack.png",
+      "card" : "Черный рюкзак Nike Heritage",
       "price" : "2 340,00 руб.",
       "text": "Плотная ткань. Легкий материал."
     },
         {
-      "img" : "vendor/img/products/Black-Dr-Martens-shoes.png",
+      "image" : "vendor/img/products/Black-Dr-Martens-shoes.png",
       "card": "Черные туфли на платформе с 3 парами люверсов Dr Martens 1461 Bex",
       "price" : "13 590,00 руб.",
       "text": "Гладкий кожаный верх. Натуральный материал."
     },
         {
-      "img" : "vendor/img/products/Dark-blue-wide-leg-ASOs-DESIGN-trousers.png",
+      "image" : "vendor/img/products/Dark-blue-wide-leg-ASOs-DESIGN-trousers.png",
       "card": "Темно-синие широкие строгие брюки ASOS DESIGN",
       "price" : "2 890,00 руб.",
       "text": "Легкая эластичная ткань сирсакер Фактурная ткань"
     }
   ]
-}
+
 
