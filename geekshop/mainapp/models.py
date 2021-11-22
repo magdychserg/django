@@ -7,8 +7,8 @@ class ProductCategory(models.Model):
     description = models.TextField(blank=True, null=True)
 
 
-def __str__(self):
-    return f'{self.name}'
+    def __str__(self):
+        return f'{self.name}'
 
 
 class Product(models.Model):
@@ -20,5 +20,5 @@ class Product(models.Model):
     category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE)
 
 
-def __str__(self):
-    return f'{self.name} | {self.category}'
+    def __str__(self):
+        return f'{self.name} | {self.category}'
