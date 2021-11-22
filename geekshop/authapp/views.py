@@ -10,7 +10,7 @@ def login(request):
 
 def register(request):
     context = {
-        'title' : 'Geekshop | Login'
+        'title' : 'Geekshop | Register'
 
     }
     return render(request, 'authapp/register.html', context)
