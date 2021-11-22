@@ -3,6 +3,6 @@ from django.db import models
 
 # Create your models here.
 
-class Users(AbstractUser):
+class User(AbstractUser):
     image = models.ImageField(upload_to='user_image', blank=True)
     age = models.PositiveIntegerField(default=18)
