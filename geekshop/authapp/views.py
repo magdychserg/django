@@ -32,8 +32,8 @@ def login(request):
 def register(request):
     if request.method=='POST':
         form = UserRegisterForm(data=request.POST)
-        if form.is_active:
-            auth.login(request,form)
+        if form.is_valid():
+            form.save()
             return HttpResponseRedirect(reverse('authapp:login'))
         else:
             print(form.errors)
@@ -44,3 +44,7 @@ def register(request):
         'form': form
     }
     return render(request, 'authapp/register.html', context)
+
+def logout(request):
+    auth.logout(request)
+    return render(request, 'mainapp/index.html')
