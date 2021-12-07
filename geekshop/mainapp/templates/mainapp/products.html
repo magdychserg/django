@@ -1,4 +1,4 @@
-{% extends "mainapp\base.html" %}
+{% extends "mainapp/base.html" %}
 {% load static %}
 
 {% block css %}
@@ -18,9 +18,15 @@
                 <h1 class="my-4">GeekShop</h1>
                 <div class="list-group">
                     {% for category in categories %}
+                        {% if category.is_active  %}
                         <a href="{% url 'mainapp:category' category.id %}"
                            class="list-group-item">{{ category.name }}</a>
+                        {% else %}
+                        {% endif %}
                     {% endfor %}
+                    <a href="{% url 'mainapp:products'  %}"
+                           class="list-group-item">Все категории</a>
+
                 </div>
             </div>
 
@@ -59,19 +65,19 @@
             <nav aria-label="Page navigation example">
                 <ul class="pagination justify-content-center">
 
-                    <li class="page-item {% if not product.has_previous %} disabled {% endif %}">
+                    <li class="page-item {% if not products.has_previous %} disabled {% endif %}">
                         <a class="page-link"
-                           href="{% if product.has_previous %} {% url 'mainapp:page' product.previous_page_number %} {% endif %}"
+                           href="{% if products.has_previous %} {% url 'mainapp:page' products.previous_page_number %} {% endif %}"
                            tabindex="-1" aria-disabled="true">Previous</a>
                     </li>
-                    {% for page in product.paginator.page_range %}
+                    {% for page in products.paginator.page_range %}
                         <li class="page-item"><a class="page-link" href="{% url 'mainapp:page' page %}">{{ page }}</a>
                         </li>
                     {% endfor %}
 
-                    <li class="page-item {% if not product.has_next %} disable {% endif %}">
+                    <li class="page-item {% if not products.has_next %} disable {% endif %}">
                         <a class="page-link"
-                           href=" {% if product.has_next %} {% url 'mainapp:page' product.next_page_number %} {% endif %}"
+                           href=" {% if products.has_next %} {% url 'mainapp:page' products.next_page_number %} {% endif %}"
                         >Next</a>
                     </li>
                 </ul>
