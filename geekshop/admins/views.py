@@ -16,7 +16,6 @@ from mainapp.models import Product, ProductCategory
 # Пользователи
 
 class AdminListView(TemplateView, BaseClassContextMixin, CustomDispatchMixin):
-    model = User
     template_name = 'admins/admin.html'
     title = 'Админка '
 
@@ -79,6 +78,7 @@ class CategoriesUpdateView(UpdateView, BaseClassContextMixin, CustomDispatchMixi
     model = ProductCategory
     template_name = 'admins/admin-categories-update-delete.html'
     form_class = ProductCategoryEditForm
+
     success_url = reverse_lazy('admins:admin_categories')
     title = 'Админка | Редактирование категории'
 

@@ -21,7 +21,7 @@
                         {% if category.is_active  %}
                         <a href="{% url 'mainapp:category' category.id %}"
                            class="list-group-item">{{ category.name }}</a>
-                        {% else %}
+
                         {% endif %}
                     {% endfor %}
                     <a href="{% url 'mainapp:products'  %}"

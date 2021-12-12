@@ -1,3 +1,5 @@
+
+
 from django import forms
 
 from authapp.forms import UserRegisterForm, UserProfilerForm
@@ -47,18 +49,24 @@ class ProductCategoryEditForm(forms.ModelForm):
 
 
 class ProductEditForm(forms.ModelForm):
+    category = forms.ModelChoiceField(queryset=ProductCategory.objects.all()),
+    image = forms.ImageField(widget=forms.FileInput)
+
     class Meta:
         model = Product
         fields = ('name', 'image', 'price', 'description', 'quantity', 'category', 'active')
 
     def __init__(self, *args, **kwargs):
-        super(ProductEditForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields['name'].widget.attrs['placeholder'] = 'Введите название товара'
         self.fields['price'].widget.attrs['placeholder'] = 'Введите стоимость в руб. '
         self.fields['description'].widget.attrs['placeholder'] = 'Введите краткое описание'
 
         for field_name, field in self.fields.items():
-            field.widget.attrs['class'] = 'form-control py-4'
+            if field_name == 'category':
+                field.widget.attrs['class'] = 'form-control'
+            else:
+                field.widget.attrs['class'] = 'form-control py-4'
 
         self.fields['image'].widget.attrs['class'] = 'custom-file-input'
 
