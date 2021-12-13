@@ -1,7 +1,9 @@
+from django.conf import settings
 from django.contrib import auth, messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.messages.views import SuccessMessageMixin
+from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 
@@ -14,12 +16,14 @@ from authapp.models import User
 from baskets.models import Basket
 from mainapp.mixin import BaseClassContextMixin, UserDispatchMixin
 
+
 class LoginListView(LoginView, BaseClassContextMixin):
     template_name = 'authapp/login.html'
     form_class = UserLoginForm
     title = 'Geekshop | Авторизация'
 
-class RegisterListView(FormView,BaseClassContextMixin):
+
+class RegisterListView(FormView, BaseClassContextMixin):
     model = User
     template_name = 'authapp/register.html'
     form_class = UserRegisterForm
@@ -29,14 +33,41 @@ class RegisterListView(FormView,BaseClassContextMixin):
     def post(self, request, *args, **kwargs):
         form = self.form_class(data=request.POST)
         if form.is_valid():
-            form.save()
-            messages.success(request, 'Вы успешно зарегистрировались')
-            return HttpResponseRedirect(reverse('authapp:login'))
+            user = form.save()
+            if self.send_verify_link(user):
+                messages.success(request, 'Вы успешно зарегистрировались')
+                return HttpResponseRedirect(reverse('authapp:login'))
+            else:
+                messages.error(request, form.errors)
         else:
-            messages.error(request,form.errors)
+            messages.error(request, form.errors)
         return render(request, self.template_name, {'form': form})
 
-class ProfileFormView(UpdateView, BaseClassContextMixin,UserDispatchMixin):
+    def send_verify_link(self, user):
+        verify_link = reverse('authapp:verify', args=[user.email, user.activation_key])
+        subject = f'Для активации учетной записи {user.username} необходимо пройти по ссылке'
+        message = f'Для подтвержения учетной записи {user.username} на портале \n {settings.DOMAIN_NAME}{verify_link}'
+        return send_mail(subject, message, settings.EMAIL_HOST_USER, [user.email], fail_silently=False)
+
+    def verify(self, email, activation_key):
+        try:
+            user = User.objects.get(email=email)
+            if user and user.activation_key == activation_key and not user.is_activation_key_expires():
+                user.activation_key = ''
+                user.activation_key_expires = None
+                user.is_active = True
+                user.save()
+                auth.login(self,user)
+
+                return render(self, 'authapp/verification.html')
+            else:
+                print(f'error activation user: {user}')
+                return render(self, 'authapp/verification.html')
+        except Exception as e:
+            return HttpResponseRedirect(reverse('index'))
+
+
+class ProfileFormView(UpdateView, BaseClassContextMixin, UserDispatchMixin):
     template_name = 'authapp/profile.html'
     form_class = UserProfilerForm
     success_url = reverse_lazy('authapp:profile')
@@ -54,6 +85,7 @@ class ProfileFormView(UpdateView, BaseClassContextMixin,UserDispatchMixin):
         messages.success(self.request, "Изменения успешно внесены")
         super().form_valid(form)
         return HttpResponseRedirect(self.get_success_url())
+
 
 class Logout(LogoutView):
     template_name = 'mainapp/index.html'

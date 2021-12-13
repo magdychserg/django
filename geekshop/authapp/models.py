@@ -4,7 +4,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 # Create your models here.
-from django.template.defaulttags import now
+from django.utils.timezone import now
 
 
 class User(AbstractUser):
