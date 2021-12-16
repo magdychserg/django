@@ -12,7 +12,7 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic import UpdateView, FormView
 
 from authapp.forms import UserLoginForm, UserRegisterForm, UserProfilerForm, UserProfileEditForm
-from authapp.models import User
+from authapp.models import User, UserProfile
 from baskets.models import Basket
 from mainapp.mixin import BaseClassContextMixin, UserDispatchMixin
 
@@ -57,7 +57,7 @@ class RegisterListView(FormView, BaseClassContextMixin):
                 user.activation_key_expires = None
                 user.is_active = True
                 user.save()
-                auth.login(self,user)
+                auth.login(self,user,backend='django.contrib.auth.backends.ModelBackend')
 
                 return render(self, 'authapp/verification.html')
             else:
