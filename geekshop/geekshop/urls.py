@@ -28,5 +28,6 @@ urlpatterns = [
     path('baskets/', include('baskets.urls', namespace='baskets')),
     path('admins/', include('admins.urls', namespace='admins')),
     path('', include('social_django.urls', namespace='social')),
+    path('orders/', include('ordersapp.urls', namespace='orders')),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
