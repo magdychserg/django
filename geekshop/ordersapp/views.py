@@ -1,42 +1,34 @@
-from django.contrib.auth.decorators import user_passes_test
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import transaction
 from django.forms import inlineformset_factory
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy, reverse
-from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView, DeleteView, DetailView, UpdateView
 
+from mainapp.mixin import BaseClassContextMixin
 from mainapp.models import Product
-from .models import Order, OrderItem
-from .forms import OrderFormItem
+from ordersapp.models import Order, OrderItem
+from ordersapp.forms import OrderFormItem
 from baskets.models import Basket
 
 
-class OrderList(ListView):
+class OrderList(ListView, BaseClassContextMixin):
     model = Order
+    title = 'Geekshop | список заказов'
 
     def get_queryset(self):
-        if self.request.user.is_staff:
+        if self.request.user.is_superuser:
             return Order.objects.all()
         return Order.objects.filter(user=self.request.user)
 
-    def get_context_data(self, **kwargs):
-        context = super(OrderList, self).get_context_data(**kwargs)
-        context['title'] = 'GeekShop - Заказы'
-        return context
-
-    # @method_decorator(user_passes_test(lambda u: u.is_superuser, login_url='/'))
-    # def dispatch(self, request, *args, **kwargs):
-    #     return super(OrderList, self).dispatch(request, *args, **kwargs)
-
-
-class OrderUpdate(LoginRequiredMixin, UpdateView):
+class OrderUpdate(LoginRequiredMixin, UpdateView,BaseClassContextMixin):
     model = Order
     fields = []
     context_object_name = 'object'
-    success_url = reverse_lazy('orders:order_list')
+    success_url = reverse_lazy('orders:list')
+    title = 'Geekshop | Изменение заказа'
 
     def get_context_data(self, **kwargs):
         data = super(OrderUpdate, self).get_context_data(**kwargs)
@@ -72,15 +64,15 @@ class OrderUpdate(LoginRequiredMixin, UpdateView):
         return super(OrderUpdate, self).form_valid(form)
 
 
-class OrderItemsCreat(CreateView):
+class OrderCreate(CreateView, BaseClassContextMixin):
     model = Order
     fields = []
     context_object_name = 'object'
-    success_url = reverse_lazy('orders:order_list')
+    success_url = reverse_lazy('orders:list')
+    title = 'Geekshop | Создание заказа'
 
     def get_context_data(self, **kwargs):
-        context = super(OrderItemsCreat, self).get_context_data(**kwargs)
-        context['title'] = 'GeekShop - Создать заказ'
+        context = super(OrderCreate, self).get_context_data(**kwargs)
         OrderFormSet = inlineformset_factory(Order, OrderItem, form=OrderFormItem, extra=1)
 
         if self.request.POST:
@@ -88,7 +80,7 @@ class OrderItemsCreat(CreateView):
         else:
             basket_items = Basket.objects.filter(user=self.request.user)
             if  basket_items:
-                OrderFormSet = inlineformset_factory(Order, OrderItem, form=OrderFormItem, extra=basket_items.count())
+                OrderFormSet = inlineformset_factory(Order, OrderItem, form=OrderFormItem, extra=basket_items.count()+1)
                 formset = OrderFormSet()
 
                 for num, form in enumerate(formset.forms):
@@ -102,9 +94,6 @@ class OrderItemsCreat(CreateView):
         context['orderitems'] = formset
         return context
 
-    # @method_decorator(user_passes_test(lambda u: u.is_superuser, login_url='/'))
-    # def dispatch(self, request, *args, **kwargs):
-    #     return super(OrderItemsCreat, self).dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
         context = self.get_context_data()
@@ -121,30 +110,24 @@ class OrderItemsCreat(CreateView):
         if self.object.get_total_cost() == 0:
             self.object.delete()
 
-        return super(OrderItemsCreat, self).form_valid(form)
+        return super(OrderCreate, self).form_valid(form)
 
 
 class OrderDelete(DeleteView):
     model = Order
-    success_url = reverse_lazy('orders:order_list')
+    success_url = reverse_lazy('orders:list')
 
 
-class OrderRead(DetailView):
+class OrderRead(DetailView, BaseClassContextMixin):
     model = Order
     template_name = 'ordersapp/order_detail.html'
-
-    def get_context_data(self, **kwargs):
-        context = super(OrderRead, self).get_context_data(**kwargs)
-        context['title'] = 'GeekShop - Просмотр заказа'
-        return context
-
+    title = 'GeekShop - Просмотр заказа'
 
 def order_forming_complete(request, pk):
     order = get_object_or_404(Order, pk=pk)
     order.status = Order.SENT_TO_PROCEED
     order.save()
-
-    return HttpResponseRedirect(reverse('orders:order_list'))
+    return HttpResponseRedirect(reverse('orders:list'))
 
 def get_product_price(request, pk):
     if request.is_ajax():

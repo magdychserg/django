@@ -16,8 +16,7 @@
     {% block css %}
     {% endblock %}
 
-
-    <!-- Custom styles for this template -->
+    <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
     <link href="{% static 'css/index.css' %}" rel="stylesheet">
 
 </head>
@@ -44,11 +43,24 @@
                                 class="fas fa-sign-in-alt"></i></a>
                     </li>
                 {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'authapp:profile' %}">{{ user.username }}
-                            <i class="fas fa-user-circle"></i>
+                    <div class="dropdown">
+                        <a class="nav-link dropdown-toggle" href="" data-toggle="dropdown">
+                            {{ user.first_name|default:'Пользователь' }}
+                            <span class="caret"></span>
                         </a>
-                    </li>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="nav-link text-dark" href="{% url 'authapp:profile' %}">
+                                    Профиль
+                                </a>
+                            </li>
+                            <li>
+                                <a class="nav-link text-dark" href="{% url 'orders:list' %}">
+                                    Заказы
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                     {% if user.is_superuser %}
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'admins:index' %}">Настройки

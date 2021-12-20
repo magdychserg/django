@@ -25,7 +25,6 @@ class Order(models.Model):
     created = models.DateTimeField(verbose_name='создан', auto_now_add=True)
     updated = models.DateTimeField(verbose_name='обновлен', auto_now=True)
     status = models.CharField(choices=ORDER_STATUS_CHOICES, verbose_name='статус', max_length=3, default=FORMING)
-
     is_active = models.BooleanField(verbose_name='активен', default=True)
 
     class Meta:
@@ -48,7 +47,7 @@ class Order(models.Model):
         items = self.orderitems.select_related()
         return sum(list(map(lambda x: x.quantity * x.product.price, items)))
 
-    def delete(self):
+    def delete(self, using= None, keep_parents=False):
         for item in self.orderitems.select_related():
             item.product.quantity += item.quantity
             item.product.save()
@@ -57,7 +56,7 @@ class Order(models.Model):
 
 
 class OrderItem(models.Model):
-    order = models.ForeignKey(Order, related_name='orderitems', on_delete=models.CASCADE)
+    order = models.ForeignKey(Order,verbose_name='заказы', related_name='orderitems', on_delete=models.CASCADE)
     product = models.ForeignKey(Product,verbose_name='продукты',on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(verbose_name='Количество',default=0)
 
