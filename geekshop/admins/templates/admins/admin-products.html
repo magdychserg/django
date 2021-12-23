@@ -4,7 +4,7 @@
     <div id="layoutSidenav_content">
         <main>
             <div class="container-fluid">
-                <h1 class="mt-4">Продукты</h1>
+                <h1 class="mt-4 text-center">Продукты</h1>
                 <div class="card mb-4">
                     <div class="card-header">
                         <i class="fas fa-table mr-1"></i>
@@ -14,7 +14,7 @@
                         <div class="table-responsive">
                             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                 <thead>
-                                <tr>
+                                <tr align="center">
                                     <th>Название продукта</th>
                                     <th>Описание продукта</th>
                                     <th>Цена</th>
@@ -30,13 +30,13 @@
                                                style="color: dodgerblue">{{ product.name }}</a></td>
                                         <td>{{ product.description }}</td>
                                         <td>{{ product.price }}</td>
-                                        <td>{{ product.quantity }}</td>
+                                        <td align="center">{{ product.quantity }}</td>
                                         <td>{{ product.category }}</td>
                                         <td class="text-center">
                                             {% if product.active %}
-                                                <i class="fas fa-check-circle"></i>
+                                                <i class="fas fa-check-circle" style="color:green"></i>
                                             {% else %}
-                                                <i class="fas fa-times-circle"></i>
+                                                <i class="fas fa-times-circle" style="color:red"></i>
                                             {% endif %}
                                         </td>
                                     </tr>
@@ -56,7 +56,7 @@
         <footer class="py-4 bg-light mt-auto">
             <div class="container-fluid">
                 <div class="d-flex align-items-center justify-content-between small">
-                    <div class="text-muted">Copyright &copy; GeekShop 2021</div>
+                    <div class="text-muted">Copyright &copy; MagdychSV 2021</div>
                 </div>
             </div>
         </footer>

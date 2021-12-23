@@ -4,18 +4,18 @@
     <div id="layoutSidenav_content">
         <main>
             <div class="container-fluid">
-                <h1 class="mt-4">Категории</h1>
+                <h1 class="mt-4 text-center">Категории</h1>
                 <div class="card mb-4">
                     <div class="card-header">
-                        <i class="fas fa-table mr-1"></i>
+                        <i class="fas fa-table mr-1 "></i>
                         Категории
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                <thead>
-                                <tr>
-                                    <th>Название категории</th>
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" >
+                                <thead >
+                                <tr align="center">
+                                    <th >Название категории</th>
                                     <th>Описание категории</th>
                                     <th>Активность</th>
                                 </tr>
@@ -29,9 +29,9 @@
 
                                         <td class="text-center">
                                             {% if category.is_active %}
-                                                <i class="fas fa-check-circle"></i>
+                                                <i class="fas fa-check-circle" style="color:green"></i>
                                             {% else %}
-                                                <i class="fas fa-times-circle"></i>
+                                                <i class="fas fa-times-circle" style="color:red"></i>
                                             {% endif %}
                                         </td>
                                     </tr>
@@ -51,7 +51,7 @@
         <footer class="py-4 bg-light mt-auto">
             <div class="container-fluid">
                 <div class="d-flex align-items-center justify-content-between small">
-                    <div class="text-muted">Copyright &copy; GeekShop 2021</div>
+                    <div class="text-muted">Copyright &copy; MagdychSV 2021</div>
                 </div>
             </div>
         </footer>

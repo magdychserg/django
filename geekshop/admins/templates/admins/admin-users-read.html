@@ -4,7 +4,7 @@
     <div id="layoutSidenav_content">
         <main>
             <div class="container-fluid">
-                <h1 class="mt-4">Пользователи</h1>
+                <h1 class="mt-4 text-center">Пользователи</h1>
                 <div class="card mb-4">
                     <div class="card-header">
                         <i class="fas fa-table mr-1"></i>
@@ -14,13 +14,14 @@
                         <div class="table-responsive">
                             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                 <thead>
-                                <tr>
+                                <tr align="center">
                                     <th>Имя пользователя</th>
                                     <th>Имя</th>
                                     <th>Фамилия</th>
                                     <th>Адрес эл. почты</th>
-                                    <th>Персонал сайта</th>
+                                    <th>Администратор сайта</th>
                                     <th>Активный</th>
+                                    <th>Удалить</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -33,16 +34,29 @@
                                         <td>{{ user.email }}</td>
                                         <td class="text-center">
                                             {% if user.is_staff %}
-                                                <i class="fas fa-check-circle"></i>
+                                                <i class="fas fa-check-circle" style="color:green"></i>
                                             {% else %}
-                                                <i class="fas fa-times-circle"></i>
+                                                <i class="fas fa-times-circle" style="color:red"></i>
                                             {% endif %}
                                         </td>
                                         <td class="text-center">
                                             {% if user.is_active %}
-                                                <i class="fas fa-check-circle"></i>
+                                                <i class="fas fa-check-circle " style="color:green"></i>
                                             {% else %}
-                                                <i class="fas fa-times-circle"></i>
+                                                <i class="fas fa-times-circle" style="color:red"></i>
+                                            {% endif %}
+                                        </td>
+                                        <td class="text-center">
+                                            {% if user.is_active %}
+                                                <a href="{% url 'admins:admin_users_delete' user.id %}"
+                                                   class="btn btn-primary btn-danger">
+                                                    удалить
+                                                    {% else %}
+                                                <a href="{% url 'admins:admin_users_delete' user.id %}"
+                                                   class="btn btn-primary btn-success" >
+                                                    восстановить
+                                                </a>
+
                                             {% endif %}
                                         </td>
                                     </tr>
@@ -62,7 +76,7 @@
         <footer class="py-4 bg-light mt-auto">
             <div class="container-fluid">
                 <div class="d-flex align-items-center justify-content-between small">
-                    <div class="text-muted">Copyright &copy; GeekShop 2021</div>
+                    <div class="text-muted">Copyright &copy; MagdychSV 2021</div>
                 </div>
             </div>
         </footer>
