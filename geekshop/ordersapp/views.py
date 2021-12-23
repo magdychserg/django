@@ -80,7 +80,7 @@ class OrderCreate(CreateView, BaseClassContextMixin):
         else:
             basket_items = Basket.objects.filter(user=self.request.user)
             if  basket_items:
-                OrderFormSet = inlineformset_factory(Order, OrderItem, form=OrderFormItem, extra=basket_items.count()+1)
+                OrderFormSet = inlineformset_factory(Order, OrderItem, form=OrderFormItem, extra=basket_items.count())
                 formset = OrderFormSet()
 
                 for num, form in enumerate(formset.forms):
