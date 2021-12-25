@@ -11,6 +11,6 @@ urlpatterns = [
     path('read/<int:pk>/', OrderRead.as_view(), name='read'),
     path('update/<int:pk>/', OrderUpdate.as_view(), name='update'),
     path('delete/<int:pk>/', OrderDelete.as_view(), name='delete'),
-    path('product/<int:pk>/', get_product_price, name="product_price"),
+    path('product/<int:pk>/price/', get_product_price, name="product_price"),
 
 ]

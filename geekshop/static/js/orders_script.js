@@ -1,4 +1,4 @@
-window.onload = function () {
+window.document.onload = function () {
     let _quantity, _price, orderitem_num, delta_quantity, orderitem_quantity, delta_cost;
     let quantity_arr = [];
     let price_arr = [];
@@ -19,41 +19,40 @@ window.onload = function () {
         } else {
             price_arr[i] = 0;
         }
-        console.log(quantity_arr);
-        console.info('QUANTITY_ARR: ', quantity_arr);
-        console.log(price_arr);
-
-        $('.order_form').on('click', 'input[type=number]', function () {
-            let target = event.target;
-            orderitem_num = parseInt(target.name.replace('orderitems-', '').replace('-quantity', ''));
-            if (price_arr[orderitem_num]) {
-                orderitem_quantity = parseInt(target.value);
-                delta_quantity = orderitem_quantity - quantity_arr[orderitem_num];
-                quantity_arr[orderitem_num] = orderitem_quantity;
-                orderSummaryUpdate(price_arr[orderitem_num], delta_quantity);
-            }
-        });
-
-        $('.order_form').on('click', 'input[type=checkbox]', function () {
-            let target = event.target;
-            orderitem_num = parseInt(target.name.replace('orderitems-', '').replace('-quantity', ''));
-            if (target.checked) {
-                delta_quantity = -quantity_arr[orderitem_num];
-            } else {
-                delta_quantity = quantity_arr[orderitem_num];
-            }
+        // console.log(quantity_arr);
+        // console.info('QUANTITY_ARR: ', quantity_arr);
+        // console.log(price_arr);
+    }
+    $('.order_form').on('click', 'input[type=number]', function () {
+        let target = event.target;
+        orderitem_num = parseInt(target.name.replace('orderitems-', '').replace('-quantity', ''));
+        if (price_arr[orderitem_num]) {
+            orderitem_quantity = parseInt(target.value);
+            delta_quantity = orderitem_quantity - quantity_arr[orderitem_num];
+            quantity_arr[orderitem_num] = orderitem_quantity;
             orderSummaryUpdate(price_arr[orderitem_num], delta_quantity);
-        });
-
-        function orderSummaryUpdate(orderitem_price, delta_quantity) {
-            delta_cost = orderitem_price * delta_quantity;
-            order_total_price = Number((order_total_price + delta_cost).toFixed(2));
-
-            order_total_quantity = order_total_quantity + delta_quantity;
-
-            $('.order_total_quantity').html(order_total_quantity.toString());
-            $('.order_total_cost').html(order_total_price.toString() + ',00');
         }
+    });
+
+    $('.order_form').on('click', 'input[type=checkbox]', function () {
+        let target = event.target;
+        orderitem_num = parseInt(target.name.replace('orderitems-', '').replace('-quantity', ''));
+        if (target.checked) {
+            delta_quantity = -quantity_arr[orderitem_num];
+        } else {
+            delta_quantity = quantity_arr[orderitem_num];
+        }
+        orderSummaryUpdate(price_arr[orderitem_num], delta_quantity);
+    });
+
+    function orderSummaryUpdate(orderitem_price, delta_quantity) {
+        delta_cost = orderitem_price * delta_quantity;
+        order_total_price = Number((order_total_price + delta_cost).toFixed(2));
+
+        order_total_quantity = order_total_quantity + delta_quantity;
+
+        $('.order_total_quantity').html(order_total_quantity.toString());
+        $('.order_total_cost').html(order_total_price.toString() + ',00');
     }
 
 
@@ -68,24 +67,68 @@ window.onload = function () {
         addText: 'добавить продукт',
         deleteText: 'удалить',
         prefix: 'orderitems',
-        removed: deleteOrderItem
+        removed: deleteOrderItem,
+
     });
+    $('.basket_list').on('click', 'input[type="number"]', function () {
+        let t_href = event.target
 
-    if (!order_total_quantity) {
-        orderSummaryRecalc();
-    }
+        $.ajax(
+            {
+                url: "/baskets/edit/" + t_href.name + "/" + t_href.value + "/",
+                success: function (data) {
+                    $('.basket_list').html(data.result)
+                }
+            }
+        );
+        event.preventDefault()
 
-    function orderSummaryRecalc() {
-        order_total_quantity = 0;
-        order_total_price = 0;
+    })
+    $('.card_add_basket').on('click', 'button[type="button"]', function () {
+        let t_href = event.target.value
 
-        for (let i = 0; i < total_forms; i++) {
-            order_total_quantity += quantity_arr[i];
-            order_total_price += quantity_arr[i] * price_arr[i];
+        $.ajax(
+            {
+                url: "/baskets/add/" + t_href + "/",
+                success: function (data) {
+                    $('.basket_list').html(data.result)
+                    alert('Товар добавлен в корзину')
+
+                }
+            }
+        );
+        event.preventDefault()
+
+    });
+    $('.order_form select').change(function () {
+
+        let target = event.target;
+        orderitem_num = parseInt(target.name.replace('orderitems-', '').replace('-product', ''));
+        let orderitem_product_pk = target.options[target.selectedIndex].value;
+
+        // console.log(orderitem_num)
+        // console.log(orderitem_product_pk)
+
+        if (orderitem_product_pk) {
+            $.ajax({
+                url: '/orders/product/' + orderitem_product_pk + '/price/',
+                success: function (data) {
+                    if (data.price) {
+                        price_arr[orderitem_num] = parseFloat(data.price)
+                        if (isNaN(quantity_arr[orderitem_num])) {
+                            quantity_arr[orderitem_num] = 0;
+                        }
+                        let price_html = '<span class="orderitems-' + orderitem_num + '-price">'
+                            + data.price.toString().replace('.', ',') + '</span> руб';
+                        let current_tr = $('.order_form table').find('tr:eq(' + (orderitem_num + 1) + ')');
+                        current_tr.find('td:eq(2)').html(price_html)
+                    }
+                }
+
+
+            })
         }
-        $('.order_total_quantity').html(order_total_quantity.toString());
-        $('.order_total_cost').html(Number(order_total_price.toFixed(2).toString()));
-    }
 
+    });
+}
 
-};
