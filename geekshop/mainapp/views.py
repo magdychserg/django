@@ -13,7 +13,7 @@ def index(request):
         'title': 'Geekshop | Главная'
 
     }
-    return render(request, 'mainapp\index.html', context)
+    return render(request, 'mainapp/index.html', context)
 
 
 
@@ -37,12 +37,12 @@ def products(request, id_category=None, page=1):
 
     context['products'] = products_paginator
     context['categories'] = ProductCategory.objects.all()
-    return render(request, 'mainapp\products.html', context)
+    return render(request, 'mainapp/products.html', context)
 
 
 class ProductDeatail(DetailView):
     model = Product
-    template_name = 'mainapp\detail.html'
+    template_name = 'mainapp/detail.html'
 
     def get_context_data(self, **kwargs):
         context = super(ProductDeatail, self).get_context_data(**kwargs)
