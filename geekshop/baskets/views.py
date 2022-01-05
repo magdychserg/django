@@ -16,7 +16,7 @@ from mainapp.models import Product
 def basket_add(request, id):
     user_select = request.user
     product = Product.objects.get(id=id)
-    baskets = Basket.objects.filter(user=user_select, product=product)
+    baskets = Basket.objects.filter(user=user_select, product=product).select_related()
 
     if baskets:
         baskets = baskets.first()
@@ -50,7 +50,7 @@ def basket_edit(request, id_basket, quantity):
         else:
             basket.delete()
 
-        baskets = Basket.objects.filter(user=request.user)
+        baskets = Basket.objects.filter(user=request.user).select_related()
         context = {'baskets': baskets}
         result = render_to_string('baskets/basket.html', context)
         return JsonResponse({'result': result})

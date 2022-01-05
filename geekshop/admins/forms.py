@@ -49,7 +49,7 @@ class ProductCategoryEditForm(forms.ModelForm):
 
 
 class ProductEditForm(forms.ModelForm):
-    category = forms.ModelChoiceField(queryset=ProductCategory.objects.all()),
+    category = forms.ModelChoiceField(queryset=ProductCategory.objects.all())
     image = forms.ImageField(widget=forms.FileInput)
 
     class Meta:
