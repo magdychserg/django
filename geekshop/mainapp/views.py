@@ -1,10 +1,10 @@
 from django.conf import settings
-from django.core import cache
+from django.core.cache import cache
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render
 import os
 
-from django.views.decorators.cache import never_cache
+from django.views.decorators.cache import never_cache, cache_page
 from django.views.generic import DetailView, ListView
 from .models import Product, ProductCategory
 
