@@ -83,12 +83,12 @@ class CategoriesUpdateView(UpdateView, BaseClassContextMixin, CustomDispatchMixi
     success_url = reverse_lazy('admins:admin_categories')
     title = 'Админка | Редактирование категории'
 
-    # def form_valid(self, form):
-    #     if 'discount' in form.cleaned_data:
-    #         discount = form.cleaned_data['discount']
-    #         if discount:
-    #             self.object.product_set.update(price=F('price')*(1-discount/100))
-    #     return HttpResponseRedirect(self.get_success_url())
+    def form_valid(self, form):
+        # if 'discount' in form.cleaned_data:
+        discount = form.cleaned_data['discount']
+        if discount:
+               self.object.product_set.update(price=F('price')*(1-discount/100))
+        return HttpResponseRedirect(self.get_success_url())
 
 class CategoriesDeleteView(DeleteView, BaseClassContextMixin, CustomDispatchMixin):
     model = ProductCategory
