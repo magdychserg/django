@@ -102,6 +102,7 @@ class CategoriesDeleteView(DeleteView, BaseClassContextMixin, CustomDispatchMixi
             self.object.product_set.update(active=False)
         else:
             self.object.is_active = True
+            self.object.product_set.update(active=True)
         self.object.save()
         return HttpResponseRedirect(self.get_success_url())
 
