@@ -1,6 +1,9 @@
 {% extends "mainapp/base.html" %}
 {% load static %}
 
+{% block css %}
+    <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+{% endblock %}
 
 
 
@@ -90,7 +93,7 @@
 {% block footer %}
     <footer class="py-5 bg-dark">
         <div class="container">
-            <p class="m-0 text-center text-white">Copyright &copy; MagdychSV 2021</p>
+            <p class="m-0 text-center text-white">Copyright &copy; GeekShop 2020</p>
         </div>
     </footer>
 {% endblock %}
